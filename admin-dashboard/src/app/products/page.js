@@ -1,22 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import DataTable from "@/components/DataTable";
 import ProductFormModal from "@/components/ProductFormModal";
-import { products as initialProducts } from "@/lib/page-data";
+import { getProducts } from "@/lib/page-data";
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const tableData = products.map(({ name, category, price, stock, status }) => ({
-    name,
+  useEffect(() => {
+    async function loadProducts() {
+      const data = await getProducts();
+      setProducts(data);
+      setLoading(false);
+    }
+
+    loadProducts();
+  }, []);
+
+  const tableData = products.map(({ title, category, price, rating }) => ({
+    name: title,
     category,
-    price,
-    stock,
-    status,
+    price: `$${price.toFixed(2)}`,
+    stock: rating?.count || 0,
+    status: rating?.count < 100 ? "Low Stock" : "Active",
   }));
 
   const handleOpenNew = () => {
@@ -64,14 +75,18 @@ export default function ProductsPage() {
           buttonText="+ Add Product"
           buttonOnClick={handleOpenNew}
         />
-        <DataTable
-          title="Products"
-          description="All products in your store"
-          columns={["Name", "Category", "Price", "Stock", "Status"]}
-          data={tableData}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+        {loading ? (
+          <div className="rounded-3xl border border-slate-200/80 bg-white/90 p-8 text-center text-slate-600 shadow-sm shadow-slate-800/5">Loading products...</div>
+        ) : (
+          <DataTable
+            title="Products"
+            description="All products in your store"
+            columns={["Name", "Category", "Price", "Stock", "Status"]}
+            data={tableData}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        )}
         <ProductFormModal
           open={modalOpen}
           product={selectedProduct}

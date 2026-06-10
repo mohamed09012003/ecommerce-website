@@ -1,29 +1,48 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import DataTable from "@/components/DataTable";
 import CustomerViewModal from "@/components/CustomerViewModal";
-import { customers as initialCustomers, orders as allOrders } from "@/lib/page-data";
+import { getCustomers, getOrders } from "@/lib/page-data";
 
 export default function CustomersPage() {
-  const [customers, setCustomers] = useState(initialCustomers);
+  const [customers, setCustomers] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const tableData = customers.map(({ name, email, phone, orders, spent }) => ({
-    name,
-    email,
-    phone,
-    orders,
-    spent,
+  useEffect(() => {
+    async function loadCustomers() {
+      const [customerData, orderData] = await Promise.all([getCustomers(), getOrders()]);
+      setCustomers(customerData);
+      setOrders(orderData);
+      setLoading(false);
+    }
+
+    loadCustomers();
+  }, []);
+
+  const tableData = customers.map((customer) => ({
+    name: `${customer.name.firstname} ${customer.name.lastname}`,
+    email: customer.email,
+    phone: customer.phone || "N/A",
+    orders: orders.filter((order) => order.user?.id === customer.id).length,
+    spent: customer.spent ? `$${customer.spent.toFixed(2)}` : "$0.00",
   }));
 
-  const selectedCustomer = selectedIndex !== null ? customers[selectedIndex] : null;
+  const selectedCustomer = selectedIndex !== null ? {
+    ...customers[selectedIndex],
+    name: `${customers[selectedIndex].name.firstname} ${customers[selectedIndex].name.lastname}`,
+    orders: orders.filter((order) => order.user?.id === customers[selectedIndex].id).length,
+    spent: customers[selectedIndex].spent ? `$${customers[selectedIndex].spent.toFixed(2)}` : "$0.00",
+  } : null;
+
   const customerOrders = useMemo(() => {
     if (!selectedCustomer) return [];
-    return allOrders.filter((order) => order.customer === selectedCustomer.name);
-  }, [selectedCustomer]);
+    return orders.filter((order) => order.user?.id === selectedCustomer.id);
+  }, [selectedCustomer, orders]);
 
   const handleView = (index) => {
     setSelectedIndex(index);
@@ -49,14 +68,18 @@ export default function CustomersPage() {
           description="View and manage customer profiles. Track purchase history and contact information."
           buttonText="+ Add Customer"
         />
-        <DataTable
-          title="Customers"
-          description="All customers in your store"
-          columns={["Name", "Email", "Phone", "Orders", "Total Spent"]}
-          data={tableData}
-          onView={handleView}
-          onDelete={handleDelete}
-        />
+        {loading ? (
+          <div className="rounded-3xl border border-slate-200/80 bg-white/90 p-8 text-center text-slate-600 shadow-sm shadow-slate-800/5">Loading customers...</div>
+        ) : (
+          <DataTable
+            title="Customers"
+            description="All customers in your store"
+            columns={["Name", "Email", "Phone", "Orders", "Total Spent"]}
+            data={tableData}
+            onView={handleView}
+            onDelete={handleDelete}
+          />
+        )}
         <CustomerViewModal
           open={modalOpen}
           customer={selectedCustomer}

@@ -11,21 +11,21 @@ export default function OrdersTable({ orders }) {
         <table className="min-w-full text-left text-sm text-slate-700">
           <thead className="bg-slate-50 text-slate-500">
             <tr>
-              <th className="px-6 py-4 font-medium">Order</th>
-              <th className="px-6 py-4 font-medium">Customer</th>
-              <th className="px-6 py-4 font-medium">Date</th>
-              <th className="px-6 py-4 font-medium">Status</th>
-              <th className="px-6 py-4 font-medium">Total</th>
+              <th className="px-6 py-4 font-medium whitespace-nowrap">Order</th>
+              <th className="px-6 py-4 font-medium whitespace-nowrap">Customer</th>
+              <th className="px-6 py-4 font-medium whitespace-nowrap">Date</th>
+              <th className="px-6 py-4 font-medium whitespace-nowrap">Status</th>
+              <th className="px-6 py-4 font-medium whitespace-nowrap">Total</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200/80">
             {orders.map((order) => (
               <tr key={order.id} className="hover:bg-slate-50/70">
-                <td className="px-6 py-4 font-medium text-slate-900">{order.id}</td>
-                <td className="px-6 py-4">{order.customer}</td>
-                <td className="px-6 py-4">{order.date}</td>
-                <td className="px-6 py-4 text-slate-600">{order.status}</td>
-                <td className="px-6 py-4 font-medium text-slate-900">{order.total}</td>
+                <td className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">{order.id}</td>
+                <td className="px-6 py-4 min-w-0 truncate">{order.customer}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{order.date}</td>
+                <td className="px-6 py-4 text-slate-600 whitespace-nowrap">{order.status}</td>
+                <td className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">{order.total}</td>
               </tr>
             ))}
           </tbody>

@@ -1,20 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import DataTable from "@/components/DataTable";
 import CategoryFormModal from "@/components/CategoryFormModal";
-import { categories as initialCategories } from "@/lib/page-data";
+import { getCategories, getProducts } from "@/lib/page-data";
 
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState(initialCategories);
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const tableData = categories.map(({ name, products, createdAt }) => ({
-    name,
-    products,
-    createdAt,
+  useEffect(() => {
+    async function loadData() {
+      const [categoryData, productData] = await Promise.all([getCategories(), getProducts()]);
+      setCategories(categoryData);
+      setProducts(productData);
+      setLoading(false);
+    }
+
+    loadData();
+  }, []);
+
+  const tableData = categories.map((category) => ({
+    name: category,
+    products: products.filter((product) => product.category === category).length,
+    createdAt: "N/A",
   }));
 
   const handleOpenNew = () => {
@@ -29,10 +42,9 @@ export default function CategoriesPage() {
   const handleSave = (category) => {
     setCategories((current) => {
       if (selectedIndex === null) {
-        const nextId = current.length ? Math.max(...current.map((item) => item.id)) + 1 : 1;
-        return [...current, { ...category, id: nextId }];
+        return [...current, category.name];
       }
-      return current.map((item, index) => (index === selectedIndex ? { ...item, ...category } : item));
+      return current.map((item, index) => (index === selectedIndex ? category.name : item));
     });
 
     setModalOpen(false);
@@ -50,7 +62,7 @@ export default function CategoriesPage() {
     }
   };
 
-  const selectedCategory = selectedIndex !== null ? categories[selectedIndex] : null;
+  const selectedCategory = selectedIndex !== null ? { name: categories[selectedIndex], products: products.filter((product) => product.category === categories[selectedIndex]).length, createdAt: "N/A" } : null;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -61,14 +73,18 @@ export default function CategoriesPage() {
           buttonText="+ Add Category"
           buttonOnClick={handleOpenNew}
         />
-        <DataTable
-          title="Categories"
-          description="All product categories"
-          columns={["Name", "Products", "Created At"]}
-          data={tableData}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+        {loading ? (
+          <div className="rounded-3xl border border-slate-200/80 bg-white/90 p-8 text-center text-slate-600 shadow-sm shadow-slate-800/5">Loading categories...</div>
+        ) : (
+          <DataTable
+            title="Categories"
+            description="All product categories"
+            columns={["Name", "Products", "Created At"]}
+            data={tableData}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        )}
         <CategoryFormModal
           open={modalOpen}
           category={selectedCategory}
