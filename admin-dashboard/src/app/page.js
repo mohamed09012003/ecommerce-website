@@ -1,10 +1,11 @@
 import StatCard from "@/components/StatCard";
 import OrdersTable from "@/components/OrdersTable";
+import SalesChart from "@/components/SalesChart";
 import TopProductsList from "@/components/TopProductsList";
 import { getDashboardData } from "@/lib/dashboard-data";
 
 export default async function Home() {
-  const { dashboardStats, recentOrders, topProducts, products, categories } = await getDashboardData();
+  const { dashboardStats, recentOrders, salesChart, topProducts, products, categories } = await getDashboardData();
   const categoryCounts = categories.map((category) => ({
     name: category,
     count: products.filter((product) => product.category === category).length,
@@ -33,6 +34,10 @@ export default async function Home() {
           </div>
 
           <TopProductsList products={topProducts} />
+        </section>
+
+        <section className="grid gap-4">
+          <SalesChart data={salesChart} />
         </section>
 
         <section className="grid gap-4 xl:grid-cols-[1.4fr_1fr]">

@@ -22,9 +22,16 @@ export default function ProductsPage() {
     loadProducts();
   }, []);
 
-  const tableData = products.map(({ title, category, price, rating }) => ({
-    name: title,
-    category,
+  const tableData = products.map(({ title, category, price, rating, image }) => ({
+    product: (
+      <div className="flex items-center gap-3 min-w-0">
+        <img src={image} alt={title} className="h-10 w-10 flex-shrink-0 rounded-2xl object-cover" />
+        <div className="min-w-0">
+          <p className="truncate font-medium text-slate-900">{title}</p>
+          <p className="text-xs text-slate-500 truncate">{category}</p>
+        </div>
+      </div>
+    ),
     price: `$${price.toFixed(2)}`,
     stock: rating?.count || 0,
     status: rating?.count < 100 ? "Low Stock" : "Active",
@@ -81,7 +88,7 @@ export default function ProductsPage() {
           <DataTable
             title="Products"
             description="All products in your store"
-            columns={["Name", "Category", "Price", "Stock", "Status"]}
+            columns={["Product", "Price", "Stock", "Status"]}
             data={tableData}
             onEdit={handleEdit}
             onDelete={handleDelete}

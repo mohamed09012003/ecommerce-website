@@ -37,6 +37,49 @@ export async function getDashboardData() {
     };
   });
 
+  const shippedOrders = orders.filter((order) => order.status === "Shipped");
+  const shippedDates = shippedOrders
+    .map((order) => new Date(order.date))
+    .filter((date) => !Number.isNaN(date));
+
+  let months = [];
+  if (shippedDates.length) {
+    const first = new Date(Math.min(...shippedDates.map((date) => date.getTime())));
+    const last = new Date(Math.max(...shippedDates.map((date) => date.getTime())));
+    const start = new Date(first.getFullYear(), first.getMonth(), 1);
+    const end = new Date(last.getFullYear(), last.getMonth(), 1);
+
+    for (let date = new Date(start); date <= end; date.setMonth(date.getMonth() + 1)) {
+      months.push({
+        key: `${date.getFullYear()}-${date.getMonth()}`,
+        label: date.toLocaleString("en-US", { month: "short", year: "numeric" }),
+        month: date.getMonth(),
+        year: date.getFullYear(),
+      });
+    }
+  }
+
+  const monthlySalesMap = new Map();
+  months.forEach((m) => monthlySalesMap.set(m.key, { label: m.label, value: 0, orders: 0, month: m.month, year: m.year }));
+
+  // aggregate only shipped orders into the map for the actual chart range
+  shippedOrders.forEach((order) => {
+    const date = new Date(order.date);
+    if (Number.isNaN(date)) return;
+
+    const key = `${date.getFullYear()}-${date.getMonth()}`;
+    const value = parseAmount(order.total);
+
+    if (monthlySalesMap.has(key)) {
+      const entry = monthlySalesMap.get(key);
+      monthlySalesMap.set(key, { ...entry, value: entry.value + value, orders: (entry.orders || 0) + 1 });
+    }
+  });
+
+  const salesChart = Array.from(monthlySalesMap.values())
+    .sort((a, b) => a.year - b.year || a.month - b.month)
+    .map(({ label, value, orders }) => ({ label, value, orders }));
+
   return {
     dashboardStats: [
       {
@@ -65,6 +108,7 @@ export async function getDashboardData() {
       },
     ],
     recentOrders,
+    salesChart,
     topProducts,
     products,
     categories,

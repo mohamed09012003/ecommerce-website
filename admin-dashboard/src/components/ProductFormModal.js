@@ -19,16 +19,20 @@ export default function ProductFormModal({ open, product, onClose, onSave }) {
     if (!open) return;
 
     if (product) {
+      const imagesFromProduct = Array.isArray(product.images)
+        ? product.images.map((image) => ({ name: image.name || image, url: image.url || "" }))
+        : product.image
+        ? [{ name: "Main image", url: product.image }]
+        : [];
+
       setFormState({
-        name: product.name || "",
+        name: product.title || product.name || "",
         category: product.category || "",
-        price: product.price || "",
-        stock: product.stock?.toString() || "",
+        price: product.price ?? "",
+        stock: (product.stock ?? product.rating?.count ?? "").toString(),
         status: product.status || "Active",
         description: product.description || "",
-        images: Array.isArray(product.images)
-          ? product.images.map((image) => ({ name: image.name || image, url: image.url || "" }))
-          : [],
+        images: imagesFromProduct,
       });
     } else {
       setFormState({
@@ -77,12 +81,14 @@ export default function ProductFormModal({ open, product, onClose, onSave }) {
 
     onSave({
       ...product,
+      title: formState.name,
       name: formState.name,
       category: formState.category,
-      price: formState.price,
+      price: Number(formState.price),
       stock: Number(formState.stock),
       status: formState.status,
       description: formState.description,
+      image: formState.images[0]?.url || product?.image,
       images: formState.images.map((item) => ({ name: item.name, url: item.url })),
     });
   };
