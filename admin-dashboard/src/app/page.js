@@ -1,7 +1,4 @@
-import StatCard from "@/components/StatCard";
-import OrdersTable from "@/components/OrdersTable";
-import SalesChart from "@/components/SalesChart";
-import TopProductsList from "@/components/TopProductsList";
+import DashboardTabs from "@/components/DashboardTabs";
 import { getDashboardData } from "@/lib/dashboard-data";
 
 export default async function Home() {
@@ -26,48 +23,13 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_420px]">
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-2">
-            {dashboardStats.map((stat) => (
-              <StatCard key={stat.label} {...stat} />
-            ))}
-          </div>
-
-          <TopProductsList products={topProducts} />
-        </section>
-
-        <section className="grid gap-4">
-          <SalesChart data={salesChart} />
-        </section>
-
-        <section className="grid gap-4 xl:grid-cols-[1.4fr_1fr]">
-          <OrdersTable orders={recentOrders} />
-          <div className="rounded-3xl border border-slate-200/80 bg-white/90 p-6 shadow-sm shadow-slate-800/5 sm:p-7">
-            <div className="min-w-0">
-              <h2 className="text-lg font-semibold text-slate-950">Category snapshot</h2>
-              <p className="mt-1 text-sm text-slate-500">A quick view of inventory and category performance.</p>
-            </div>
-            <div className="mt-6 grid gap-4 sm:grid-cols-3">
-              {categoryCounts.length ? (
-                categoryCounts.slice(0, 3).map((category) => (
-                  <div key={category.name} className="rounded-3xl bg-slate-50 p-4 min-h-[120px]">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-slate-600 truncate">{category.name}</p>
-                    </div>
-                    <div className="mt-4 flex items-end justify-between gap-4">
-                      <p className="text-2xl font-semibold leading-tight text-slate-950">{category.count}</p>
-                      <p className="text-sm font-medium text-slate-600">products</p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="rounded-3xl bg-slate-50 p-4 text-sm text-slate-600">
-                  No category data available.
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
+        <DashboardTabs
+          dashboardStats={dashboardStats}
+          salesChart={salesChart}
+          topProducts={topProducts}
+          recentOrders={recentOrders}
+          categoryCounts={categoryCounts}
+        />
       </main>
     </div>
   );

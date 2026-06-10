@@ -96,7 +96,7 @@ export default function ProductFormModal({ open, product, onClose, onSave }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 px-4 py-6">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-3xl overflow-hidden rounded-3xl bg-white shadow-2xl"
@@ -121,102 +121,104 @@ export default function ProductFormModal({ open, product, onClose, onSave }) {
           </div>
         </div>
 
-        <div className="grid gap-6 px-6 py-6 sm:grid-cols-2 sm:px-8">
-          <div className="space-y-4">
-            <label className="block text-sm font-medium text-slate-600">Product name</label>
-            <input
-              type="text"
-              value={formState.name}
-              onChange={handleChange("name")}
-              required
-              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
-            />
-          </div>
+        <div className="max-h-[calc(100vh-20rem)] overflow-y-auto px-6 py-6 sm:px-8">
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div className="space-y-4">
+              <label className="block text-sm font-medium text-slate-600">Product name</label>
+              <input
+                type="text"
+                value={formState.name}
+                onChange={handleChange("name")}
+                required
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
+              />
+            </div>
 
-          <div className="space-y-4">
-            <label className="block text-sm font-medium text-slate-600">Category</label>
-            <input
-              type="text"
-              value={formState.category}
-              onChange={handleChange("category")}
-              required
-              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
-            />
-          </div>
+            <div className="space-y-4">
+              <label className="block text-sm font-medium text-slate-600">Category</label>
+              <input
+                type="text"
+                value={formState.category}
+                onChange={handleChange("category")}
+                required
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
+              />
+            </div>
 
-          <div className="space-y-4">
-            <label className="block text-sm font-medium text-slate-600">Price</label>
-            <input
-              type="text"
-              value={formState.price}
-              onChange={handleChange("price")}
-              required
-              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
-            />
-          </div>
+            <div className="space-y-4">
+              <label className="block text-sm font-medium text-slate-600">Price</label>
+              <input
+                type="text"
+                value={formState.price}
+                onChange={handleChange("price")}
+                required
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
+              />
+            </div>
 
-          <div className="space-y-4">
-            <label className="block text-sm font-medium text-slate-600">Stock</label>
-            <input
-              type="number"
-              min="0"
-              value={formState.stock}
-              onChange={handleChange("stock")}
-              required
-              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
-            />
-          </div>
+            <div className="space-y-4">
+              <label className="block text-sm font-medium text-slate-600">Stock</label>
+              <input
+                type="number"
+                min="0"
+                value={formState.stock}
+                onChange={handleChange("stock")}
+                required
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
+              />
+            </div>
 
-          <div className="space-y-4 sm:col-span-2">
-            <label className="block text-sm font-medium text-slate-600">Status</label>
-            <select
-              value={formState.status}
-              onChange={handleChange("status")}
-              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
-            >
-              {statusOptions.map((status) => (
-                <option key={status} value={status}>
-                  {status}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className="space-y-4 sm:col-span-2">
+              <label className="block text-sm font-medium text-slate-600">Status</label>
+              <select
+                value={formState.status}
+                onChange={handleChange("status")}
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
+              >
+                {statusOptions.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="space-y-4 sm:col-span-2">
-            <label className="block text-sm font-medium text-slate-600">Description</label>
-            <textarea
-              value={formState.description}
-              onChange={handleChange("description")}
-              rows={4}
-              className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
-            />
-          </div>
+            <div className="space-y-4 sm:col-span-2">
+              <label className="block text-sm font-medium text-slate-600">Description</label>
+              <textarea
+                value={formState.description}
+                onChange={handleChange("description")}
+                rows={4}
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
+              />
+            </div>
 
-          <div className="space-y-4 sm:col-span-2">
-            <label className="block text-sm font-medium text-slate-600">Product images</label>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleFileChange}
-              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
-            />
-            <div className="grid gap-3 sm:grid-cols-3">
-              {formState.images.map((image, index) => (
-                <div key={`${image.name}-${index}`} className="group overflow-hidden rounded-3xl border border-slate-200 bg-slate-50">
-                  {image.url ? (
-                    <img src={image.url} alt={image.name} className="h-32 w-full object-cover" />
-                  ) : (
-                    <div className="flex h-32 items-center justify-center text-sm text-slate-500">{image.name}</div>
-                  )}
-                  <div className="flex items-center justify-between gap-2 px-3 py-2 text-xs text-slate-600">
-                    <span className="truncate">{image.name}</span>
-                    <button type="button" onClick={() => handleRemoveImage(index)} className="text-red-600 hover:text-red-800">
-                      Remove
-                    </button>
+            <div className="space-y-4 sm:col-span-2">
+              <label className="block text-sm font-medium text-slate-600">Product images</label>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFileChange}
+                className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-950 focus:border-slate-400 focus:outline-none"
+              />
+              <div className="grid gap-3 sm:grid-cols-3">
+                {formState.images.map((image, index) => (
+                  <div key={`${image.name}-${index}`} className="group overflow-hidden rounded-3xl border border-slate-200 bg-slate-50">
+                    {image.url ? (
+                      <img src={image.url} alt={image.name} className="h-32 w-full object-cover" />
+                    ) : (
+                      <div className="flex h-32 items-center justify-center text-sm text-slate-500">{image.name}</div>
+                    )}
+                    <div className="flex items-center justify-between gap-2 px-3 py-2 text-xs text-slate-600">
+                      <span className="truncate">{image.name}</span>
+                      <button type="button" onClick={() => handleRemoveImage(index)} className="text-red-600 hover:text-red-800">
+                        Remove
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
