@@ -1,16 +1,45 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import DataTable from "@/components/DataTable";
-import { customers } from "@/lib/page-data";
+import CustomerViewModal from "@/components/CustomerViewModal";
+import { customers as initialCustomers, orders as allOrders } from "@/lib/page-data";
 
 export default function CustomersPage() {
-  const columns = ["Name", "Email", "Phone", "Orders", "Total Spent"];
-  const tableData = customers.map(({ id, name, email, phone, orders, spent }) => ({
+  const [customers, setCustomers] = useState(initialCustomers);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const tableData = customers.map(({ name, email, phone, orders, spent }) => ({
     name,
     email,
     phone,
     orders,
     spent,
   }));
+
+  const selectedCustomer = selectedIndex !== null ? customers[selectedIndex] : null;
+  const customerOrders = useMemo(() => {
+    if (!selectedCustomer) return [];
+    return allOrders.filter((order) => order.customer === selectedCustomer.name);
+  }, [selectedCustomer]);
+
+  const handleView = (index) => {
+    setSelectedIndex(index);
+    setModalOpen(true);
+  };
+
+  const handleDelete = (index) => {
+    setCustomers((current) => current.filter((_, idx) => idx !== index));
+    if (selectedIndex === index) {
+      setModalOpen(false);
+    }
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -23,9 +52,16 @@ export default function CustomersPage() {
         <DataTable
           title="Customers"
           description="All customers in your store"
-          columns={columns}
+          columns={["Name", "Email", "Phone", "Orders", "Total Spent"]}
           data={tableData}
-          actions={true}
+          onView={handleView}
+          onDelete={handleDelete}
+        />
+        <CustomerViewModal
+          open={modalOpen}
+          customer={selectedCustomer}
+          orders={customerOrders}
+          onClose={handleClose}
         />
       </main>
     </div>

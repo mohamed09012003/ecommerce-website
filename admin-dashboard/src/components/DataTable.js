@@ -1,4 +1,4 @@
-export default function DataTable({ title, description, columns, data, actions }) {
+export default function DataTable({ title, description, columns, data, onView, onEdit, onDelete }) {
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white/90 shadow-sm shadow-slate-800/5">
       <div className="px-6 py-5 border-b border-slate-200/80 sm:px-7">
@@ -14,7 +14,7 @@ export default function DataTable({ title, description, columns, data, actions }
                   {col}
                 </th>
               ))}
-              {actions && <th className="px-6 py-4 font-medium">Actions</th>}
+              {(onView || onEdit || onDelete) && <th className="px-6 py-4 font-medium">Actions</th>}
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200/80">
@@ -41,11 +41,24 @@ export default function DataTable({ title, description, columns, data, actions }
                     )}
                   </td>
                 ))}
-                {actions && (
+                {(onView || onEdit || onDelete) && (
                   <td className="px-6 py-4">
-                    <div className="flex gap-2">
-                      <button className="text-xs font-medium text-slate-600 hover:text-slate-900">Edit</button>
-                      <button className="text-xs font-medium text-red-600 hover:text-red-900">Delete</button>
+                    <div className="flex flex-wrap gap-2">
+                      {onView && (
+                        <button onClick={() => onView(idx)} className="text-xs font-medium text-slate-600 hover:text-slate-900">
+                          View
+                        </button>
+                      )}
+                      {onEdit && (
+                        <button onClick={() => onEdit(idx)} className="text-xs font-medium text-slate-600 hover:text-slate-900">
+                          Edit
+                        </button>
+                      )}
+                      {onDelete && (
+                        <button onClick={() => onDelete(idx)} className="text-xs font-medium text-red-600 hover:text-red-900">
+                          Delete
+                        </button>
+                      )}
                     </div>
                   </td>
                 )}

@@ -23,11 +23,66 @@ export const customers = [
 ];
 
 export const orders = [
-  { id: "#A1234", customer: "Ava Johnson", date: "Jun 8, 2026", status: "Shipped", items: 3, total: "$320.00" },
-  { id: "#A1235", customer: "Noah Lee", date: "Jun 9, 2026", status: "Processing", items: 1, total: "$89.99" },
-  { id: "#A1236", customer: "Mia Chen", date: "Jun 9, 2026", status: "Delivered", items: 5, total: "$1,688.50" },
-  { id: "#A1237", customer: "Leo Smith", date: "Jun 10, 2026", status: "Pending", items: 2, total: "$56.75" },
-  { id: "#A1238", customer: "Emma Wilson", date: "Jun 10, 2026", status: "Shipped", items: 4, total: "$445.20" },
+  {
+    id: "#A1234",
+    customer: "Ava Johnson",
+    date: "Jun 8, 2026",
+    status: "Shipped",
+    items: 3,
+    total: "$320.00",
+    products: [
+      { name: "Wireless Headphones", quantity: 1, price: "$129.99" },
+      { name: "USB-C Cable", quantity: 2, price: "$19.99" },
+      { name: "Phone Stand", quantity: 1, price: "$24.99" },
+    ],
+  },
+  {
+    id: "#A1235",
+    customer: "Noah Lee",
+    date: "Jun 9, 2026",
+    status: "Processing",
+    items: 1,
+    total: "$89.99",
+    products: [{ name: "Travel Backpack", quantity: 1, price: "$89.99" }],
+  },
+  {
+    id: "#A1236",
+    customer: "Mia Chen",
+    date: "Jun 9, 2026",
+    status: "Delivered",
+    items: 5,
+    total: "$1,688.50",
+    products: [
+      { name: "Wireless Headphones", quantity: 2, price: "$129.99" },
+      { name: "Smart Fitness Watch", quantity: 1, price: "$249.99" },
+      { name: "Travel Backpack", quantity: 2, price: "$89.99" },
+    ],
+  },
+  {
+    id: "#A1237",
+    customer: "Leo Smith",
+    date: "Jun 10, 2026",
+    status: "Pending",
+    items: 2,
+    total: "$56.75",
+    products: [
+      { name: "USB-C Cable", quantity: 1, price: "$19.99" },
+      { name: "Phone Stand", quantity: 1, price: "$24.99" },
+    ],
+  },
+  {
+    id: "#A1238",
+    customer: "Emma Wilson",
+    date: "Jun 10, 2026",
+    status: "Shipped",
+    items: 4,
+    total: "$445.20",
+    products: [
+      { name: "Smart Fitness Watch", quantity: 1, price: "$249.99" },
+      { name: "Travel Backpack", quantity: 1, price: "$89.99" },
+      { name: "USB-C Cable", quantity: 2, price: "$19.99" },
+    ],
+  },
 ];
 
 export const admins = [

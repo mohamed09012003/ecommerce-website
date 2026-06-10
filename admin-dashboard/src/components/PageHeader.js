@@ -1,4 +1,4 @@
-export default function PageHeader({ title, description, buttonText }) {
+export default function PageHeader({ title, description, buttonText, buttonOnClick }) {
   return (
     <section className="rounded-3xl bg-white/90 p-6 shadow-sm shadow-slate-800/5 backdrop-blur sm:p-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -10,7 +10,11 @@ export default function PageHeader({ title, description, buttonText }) {
             {description}
           </p>
         </div>
-        <button className="inline-flex h-12 items-center justify-center rounded-2xl bg-slate-950 px-5 text-sm font-semibold text-white transition hover:bg-slate-800 whitespace-nowrap">
+        <button
+          type="button"
+          onClick={buttonOnClick}
+          className="inline-flex h-12 items-center justify-center rounded-2xl bg-slate-950 px-5 text-sm font-semibold text-white transition hover:bg-slate-800 whitespace-nowrap"
+        >
           {buttonText}
         </button>
       </div>
