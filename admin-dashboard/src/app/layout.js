@@ -1,4 +1,5 @@
-import Sidebar from "@/components/Sidebar";
+import DashboardGuard from "@/components/DashboardGuard";
+import Shell from "@/components/Shell";
 import "./globals.css";
 
 export const metadata = {
@@ -9,9 +10,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
-        <Sidebar />
-        <div className="flex-1">{children}</div>
+      <body>
+        <DashboardGuard>
+          <Shell>{children}</Shell>
+        </DashboardGuard>
       </body>
     </html>
   );

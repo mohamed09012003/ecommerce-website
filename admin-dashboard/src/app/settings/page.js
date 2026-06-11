@@ -1,5 +1,6 @@
 import PageHeader from "@/components/PageHeader";
 import DataTable from "@/components/DataTable";
+import LogoutButton from "@/components/LogoutButton";
 import { admins } from "@/lib/page-data";
 
 export default function SettingsPage() {
@@ -134,12 +135,10 @@ export default function SettingsPage() {
               <p className="text-sm text-slate-600">Logged in as: <span className="font-medium text-slate-950">admin@store.com</span></p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <button className="inline-flex h-12 items-center justify-center rounded-2xl bg-red-50 px-5 text-sm font-semibold text-red-600 transition hover:bg-red-100 border border-red-200">
-                🚪 Logout
-              </button>
-              <button className="inline-flex h-12 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-950 transition hover:border-slate-300 hover:bg-slate-50">
-                Change Password
-              </button>
+              <LogoutButton />
+            <button className="inline-flex h-12 items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-950 transition hover:border-slate-300 hover:bg-slate-50">
+              Change Password
+            </button>
             </div>
           </div>
         </div>
